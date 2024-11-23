@@ -11,6 +11,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,27 +35,30 @@ class OrderServiceApplicationTests {
 	}
 
 	@Test
-	void placeOrderTest() {
-		String requestBody = """
+	void shouldSubmitOrder() {
+		String submitOrderJson = """
 				{
-				"skuCode" : "SKU-001",
-				"price" : 99.99,
-				"quantity" : 5
+				"skuCode" : "samsung_tv_2024",
+				"price" : 5000,
+				"quantity" : 10
 				}
 				""";
 
 		// week 10 - mock a call to inventory-service
-		InventoryClientStub.stubInventoryCall("SKU-001", 5);
+		InventoryClientStub.stubInventoryCall("samsung_tv_2024", 10);
 
-		RestAssured.given()
+		var responseBodyString = RestAssured.given()
 				.contentType("application/json")
-				.body(requestBody)
+				.body(submitOrderJson)
 				.when()
 				.post("/api/order")
 				.then()
 				.log().all()
 				.statusCode(201)
-				.body(Matchers.equalTo("Order Placed Successfully"));
+				.extract()
+				.body().asString();
+
+		assertThat(responseBodyString, Matchers.is("Order Placed Successfully"));
 
 	}
 
