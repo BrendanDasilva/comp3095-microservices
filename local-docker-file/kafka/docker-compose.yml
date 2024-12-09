@@ -40,7 +40,7 @@ services:
     environment:
       SERVER_PORT: 8088
       KAFKA_CLUSTER_NAME: local
-      KAFKA_CLUSTERS_BOOTSTRAPSERVERS: broker:9092
+      KAFKA_CLUSTERS_BOOTSTRAPSERVERS: broker:29092
       DYNAMIC_CONFIG_ENABLED: 'true'
     depends_on:
       - broker

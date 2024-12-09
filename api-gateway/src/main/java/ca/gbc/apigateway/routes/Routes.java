@@ -52,7 +52,7 @@ public class Routes {
         return GatewayRouterFunctions.route("order_service")
             .route(RequestPredicates.path("/api/order"), request -> {
                 log.info("Request received for order-service: {}", request.uri());
-                return HandlerFunctions.http(productServiceUrl).handle(request);
+                return HandlerFunctions.http(orderServiceUrl).handle(request);
             })
             .filter(CircuitBreakerFilterFunctions
                 .circuitBreaker("orderServiceCircuitBreaker", URI.create("forward:/fallbackRoute")))
@@ -65,7 +65,7 @@ public class Routes {
         return GatewayRouterFunctions.route("inventory_service")
             .route(RequestPredicates.path("/api/inventory"), request -> {
                 log.info("Request received for inventory-service: {}", request.uri());
-                return HandlerFunctions.http(productServiceUrl).handle(request);
+                return HandlerFunctions.http(inventoryServiceUrl).handle(request);
             })
             .filter(CircuitBreakerFilterFunctions
                 .circuitBreaker("inventoryServiceCircuitBreaker", URI.create("forward:/fallbackRoute")))
