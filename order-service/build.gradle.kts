@@ -21,6 +21,9 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("https://packages.confluent.io/maven/")
+	}
 }
 
 // week 10 - allows for not specifying version in the dependencies below, we ran into an issue with openfeign and this resolves it
@@ -47,8 +50,13 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test:3.3.0")
 	testImplementation("org.testcontainers:kafka:1.20.4")
 	//
+	implementation("org.apache.avro:avro:1.12.0")
+	implementation("io.confluent:kafka-schema-registry-client:7.7.1")
+	implementation("io.confluent:kafka-avro-serializer:7.7.1")
+	implementation(project(":shared-schema"))
+	//
 	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+//	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
